@@ -1,0 +1,48 @@
+# ==============================================================================
+# AutoSec-Hardener : Règles Auditd pour la surveillance système (ANSSI / CIS)
+# Fichier cible : /etc/audit/rules.d/audit.rules
+# ==============================================================================
+
+# Supprimer toutes les règles existantes
+-D
+
+# Définir la taille du buffer pour éviter la perte d'événements
+-b 8192
+
+# Définir l'action en cas de débordement du buffer (1 = log, 2 = suspendre)
+-f 1
+
+# ------------------------------------------------------------------------------
+# 1. Surveillance de l'intégrité des comptes et mots de passe
+# ------------------------------------------------------------------------------
+-w /etc/passwd -p wa -k identity_changes
+-w /etc/shadow -p wa -k identity_changes
+-w /etc/group -p wa -k identity_changes
+-w /etc/gshadow -p wa -k identity_changes
+-w /etc/security/opasswd -p wa -k identity_changes
+
+# ------------------------------------------------------------------------------
+# 2. Surveillance des privilèges et élévation sudo
+# ------------------------------------------------------------------------------
+-w /etc/sudoers -p wa -k sudoers_changes
+-w /etc/sudoers.d/ -p wa -k sudoers_changes
+
+# ------------------------------------------------------------------------------
+# 3. Surveillance des fichiers de configuration réseau et système
+# ------------------------------------------------------------------------------
+-w /etc/hosts -p wa -k system_network_changes
+-w /etc/network/ -p wa -k system_network_changes
+-w /etc/netplan/ -p wa -k system_network_changes
+-w /etc/ssh/sshd_config -p wa -k sshd_config_changes
+-w /etc/ssh/sshd_config.d/ -p wa -k sshd_config_changes
+
+# ------------------------------------------------------------------------------
+# 4. Surveillance des modifications de date / heure système
+# ------------------------------------------------------------------------------
+-a always,exit -F arch=b64 -S adjtimex,settimeofday -k time_change
+-a always,exit -F arch=b64 -S clock_settime -k time_change
+
+# ------------------------------------------------------------------------------
+# 5. Verrouillage de la configuration d'auditd (Immuable jusqu'au redémarrage)
+# ------------------------------------------------------------------------------
+-e 2
