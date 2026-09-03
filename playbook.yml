@@ -1,0 +1,93 @@
+---
+# ==============================================================================
+# AutoSec-Hardener : Ansible Playbook de Durcissement Sécurité (ANSSI / CIS)
+# ==============================================================================
+- name: Application du Durcissement de Sécurité sur les Serveurs Linux
+  hosts: all
+  become: yes
+
+  vars:
+    ssh_port: 22
+    allowed_admin_ips:
+      - "192.168.1.0/24"
+      - "127.0.0.1"
+
+  tasks:
+    - name: 1. Mettre à jour le cache APT et installer les paquets de sécurité
+      apt:
+        name:
+          - ufw
+          - fail2ban
+          - auditd
+          - audispd-plugins
+          - libpam-pwquality
+          - unattended-upgrades
+        state: present
+        update_cache: yes
+
+    - name: 2. Déployer la configuration noyau et réseau (sysctl)
+      copy:
+        src: configs/sysctl_security.conf
+        dest: /etc/sysctl.d/99-security-hardening.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Recharger sysctl
+
+    - name: 3. Déployer la configuration durcie OpenSSH
+      copy:
+        src: configs/sshd_hardened.conf
+        dest: /etc/ssh/sshd_config.d/99-hardened.conf
+        owner: root
+        group: root
+        mode: '0600'
+        validate: '/usr/sbin/sshd -t -f %s'
+      notify: Redémarrer SSH
+
+    - name: 4. Déployer les règles Auditd
+      copy:
+        src: configs/audit.rules
+        dest: /etc/audit/rules.d/audit.rules
+        owner: root
+        group: root
+        mode: '0640'
+      notify: Recharger Auditd
+
+    - name: 5. Déployer la configuration Fail2ban
+      copy:
+        src: configs/jail.local
+        dest: /etc/fail2ban/jail.local
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Redémarrer Fail2ban
+
+    - name: 6. Configurer le pare-feu UFW (Politique DROP par défaut)
+      ufw:
+        state: enabled
+        policy: deny
+        direction: incoming
+
+    - name: 7. Autoriser le port SSH dans le pare-feu
+      ufw:
+        rule: allow
+        port: "{{ ssh_port }}"
+        proto: tcp
+        comment: "SSH Management Access"
+
+  handlers:
+    - name: Recharger sysctl
+      command: sysctl --system
+
+    - name: Redémarrer SSH
+      service:
+        name: ssh
+        state: restarted
+
+    - name: Recharger Auditd
+      command: augenrules --load
+
+    - name: Redémarrer Fail2ban
+      service:
+        name: fail2ban
+        state: restarted
