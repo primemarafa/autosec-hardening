@@ -1,0 +1,78 @@
+{
+  "tool": "autosec-hardening",
+  "version": "1.1.0",
+  "timestamp": "2026-09-07T12:00:00Z",
+  "hostname": "srv-prod-01",
+  "os": "docker",
+  "os_details": "Docker Engine v24.0.7",
+  "score": 62,
+  "passed": 5,
+  "failed": 3,
+  "total": 8,
+  "checks": [
+    {
+      "id": "DOCK-DAEMON-001",
+      "category": "Démon Docker",
+      "description": "Socket TCP du démon non exposé sans TLS (Port 2375)",
+      "status": "pass",
+      "severity": "critical",
+      "remediation": "Ne pas exposer l'API Docker sur tcp:// sans authentification mTLS (--tlsverify)"
+    },
+    {
+      "id": "DOCK-DAEMON-002",
+      "category": "Démon Docker",
+      "description": "Communication inter-conteneurs restreinte (icc: false)",
+      "status": "fail",
+      "severity": "high",
+      "remediation": "Définir '\"icc\": false' dans /etc/docker/daemon.json"
+    },
+    {
+      "id": "DOCK-DAEMON-003",
+      "category": "Démon Docker",
+      "description": "Empêcher l'escalade de privilèges par défaut (no-new-privileges: true)",
+      "status": "fail",
+      "severity": "high",
+      "remediation": "Définir '\"no-new-privileges\": true' dans /etc/docker/daemon.json"
+    },
+    {
+      "id": "DOCK-DAEMON-004",
+      "category": "Démon Docker",
+      "description": "Fonction Live-Restore activée (disponibilité lors des màj dockerd)",
+      "status": "pass",
+      "severity": "medium",
+      "remediation": "Définir '\"live-restore\": true' dans /etc/docker/daemon.json"
+    },
+    {
+      "id": "DOCK-DAEMON-005",
+      "category": "Démon Docker",
+      "description": "Rotation et limitation de taille des journaux configurées (max-size)",
+      "status": "pass",
+      "severity": "medium",
+      "remediation": "Configurer 'log-opts': {'max-size': '10m', 'max-file': '3'} dans daemon.json"
+    },
+    {
+      "id": "DOCK-RUN-001",
+      "category": "Sécurité Conteneurs",
+      "description": "Aucun conteneur en mode Privilégié (--privileged=false)",
+      "status": "pass",
+      "severity": "critical",
+      "remediation": "Ne jamais utiliser le drapeau --privileged qui donne les droits root réels de l'hôte"
+    },
+    {
+      "id": "DOCK-RUN-002",
+      "category": "Sécurité Conteneurs",
+      "description": "Conteneurs exécutés avec un utilisateur non-root dédié",
+      "status": "pass",
+      "severity": "critical",
+      "remediation": "Spécifier 'USER <uid>' dans le Dockerfile ou exécuter avec --user <uid>:<gid>"
+    },
+    {
+      "id": "DOCK-IMG-001",
+      "category": "Images & Supply Chain",
+      "description": "Signature des images et Content Trust actifs (DOCKER_CONTENT_TRUST=1)",
+      "status": "fail",
+      "severity": "high",
+      "remediation": "Exporter 'export DOCKER_CONTENT_TRUST=1' dans /etc/environment ou le profil shell"
+    }
+  ]
+}

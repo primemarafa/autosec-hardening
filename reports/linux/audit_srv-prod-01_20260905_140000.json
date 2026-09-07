@@ -1,0 +1,94 @@
+{
+  "tool": "autosec-hardening",
+  "version": "1.1.0",
+  "timestamp": "2026-09-05T14:00:00Z",
+  "hostname": "srv-prod-01",
+  "os": "linux",
+  "os_details": "Ubuntu 22.04.3 LTS",
+  "score": 90,
+  "passed": 9,
+  "failed": 1,
+  "total": 10,
+  "checks": [
+    {
+      "id": "SSH-001",
+      "category": "SSH",
+      "description": "Connexion directe du compte Root désactivée",
+      "status": "pass",
+      "severity": "critical",
+      "remediation": "Définir PermitRootLogin no dans /etc/ssh/sshd_config"
+    },
+    {
+      "id": "SSH-002",
+      "category": "SSH",
+      "description": "Authentification par mot de passe désactivée (Clés obligatoires)",
+      "status": "pass",
+      "severity": "high",
+      "remediation": "Désactiver PasswordAuthentication et configurer des clés SSH"
+    },
+    {
+      "id": "SSH-003",
+      "category": "SSH",
+      "description": "Nombre maximal de tentatives d'authentification limité (<=3)",
+      "status": "pass",
+      "severity": "medium",
+      "remediation": "Définir MaxAuthTries à 3 ou moins dans sshd_config"
+    },
+    {
+      "id": "NET-001",
+      "category": "Réseau & Noyau",
+      "description": "Protection TCP SYN Flood activée (tcp_syncookies)",
+      "status": "pass",
+      "severity": "high",
+      "remediation": "Activer net.ipv4.tcp_syncookies = 1 via sysctl"
+    },
+    {
+      "id": "NET-002",
+      "category": "Réseau & Noyau",
+      "description": "Protection anti-usurpation IP (Reverse Path Filtering)",
+      "status": "pass",
+      "severity": "high",
+      "remediation": "Activer net.ipv4.conf.all.rp_filter = 1 via sysctl"
+    },
+    {
+      "id": "NET-003",
+      "category": "Réseau & Noyau",
+      "description": "Refus des redirections ICMP (Anti-MitM)",
+      "status": "pass",
+      "severity": "medium",
+      "remediation": "Définir net.ipv4.conf.all.accept_redirects = 0 via sysctl"
+    },
+    {
+      "id": "NET-004",
+      "category": "Réseau & Noyau",
+      "description": "Randomisation mémoire ASLR au niveau maximal (2)",
+      "status": "pass",
+      "severity": "high",
+      "remediation": "Définir kernel.randomize_va_space = 2 via sysctl"
+    },
+    {
+      "id": "FW-001",
+      "category": "Pare-feu & Détection",
+      "description": "Pare-feu applicatif (UFW) actif",
+      "status": "pass",
+      "severity": "critical",
+      "remediation": "Installer et activer UFW avec ufw --force enable"
+    },
+    {
+      "id": "FW-002",
+      "category": "Pare-feu & Détection",
+      "description": "Service Fail2ban actif et surveillant les logs",
+      "status": "pass",
+      "severity": "medium",
+      "remediation": "Installer et démarrer le service fail2ban"
+    },
+    {
+      "id": "FW-003",
+      "category": "Pare-feu & Détection",
+      "description": "Service de traçabilité Auditd actif",
+      "status": "fail",
+      "severity": "medium",
+      "remediation": "Installer et démarrer le service auditd"
+    }
+  ]
+}

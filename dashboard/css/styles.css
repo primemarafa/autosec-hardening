@@ -1,0 +1,173 @@
+/* ==============================================================================
+   AutoSec Dashboard — Styles personnalisés
+   Cohérent avec it-command-hub (glassmorphism, dark mode, animations)
+   ============================================================================== */
+
+/* Glassmorphism panel */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.dark .glass-panel {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+/* Terminal block */
+.terminal-block {
+    background: #0f172a;
+    color: #38bdf8;
+    border: 1px solid #1e293b;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    user-select: all;
+}
+.dark .terminal-block {
+    background: #020617;
+}
+
+/* Card hover animation */
+.check-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.dark .check-card {
+    border: 1px solid rgba(51, 65, 85, 0.5);
+}
+.check-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+.dark .check-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== Severity Badges ===== */
+.badge-critical {
+    background-color: #ffe4e6; /* rose-100 */
+    color: #be123c; /* rose-700 */
+}
+.dark .badge-critical {
+    background-color: rgba(136, 19, 55, 0.6); /* rose-900/60 */
+    color: #fda4af; /* rose-300 */
+}
+
+.badge-high {
+    background-color: #fef3c7; /* amber-100 */
+    color: #b45309; /* amber-700 */
+}
+.dark .badge-high {
+    background-color: rgba(120, 53, 15, 0.6); /* amber-900/60 */
+    color: #fcd34d; /* amber-300 */
+}
+
+.badge-medium {
+    background-color: #dbeafe; /* blue-100 */
+    color: #1d4ed8; /* blue-700 */
+}
+.dark .badge-medium {
+    background-color: rgba(30, 58, 138, 0.6); /* blue-900/60 */
+    color: #93c5fd; /* blue-300 */
+}
+
+.badge-low {
+    background-color: #f1f5f9; /* slate-100 */
+    color: #475569; /* slate-600 */
+}
+.dark .badge-low {
+    background-color: #334155; /* slate-700 */
+    color: #cbd5e1; /* slate-300 */
+}
+
+/* ===== Status Badges ===== */
+.badge-pass {
+    background-color: #d1fae5; /* emerald-100 */
+    color: #047857; /* emerald-700 */
+}
+.dark .badge-pass {
+    background-color: rgba(6, 78, 59, 0.6); /* emerald-900/60 */
+    color: #6ee7b7; /* emerald-300 */
+}
+
+.badge-fail {
+    background-color: #ffe4e6; /* rose-100 */
+    color: #be123c; /* rose-700 */
+}
+.dark .badge-fail {
+    background-color: rgba(136, 19, 55, 0.6); /* rose-900/60 */
+    color: #fda4af; /* rose-300 */
+}
+
+/* ===== Nav buttons active state ===== */
+.nav-btn {
+    color: #475569;
+}
+.dark .nav-btn {
+    color: #94a3b8;
+}
+.nav-btn:hover {
+    background-color: #f1f5f9;
+}
+.dark .nav-btn:hover {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+.nav-btn.active {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: 600;
+}
+.dark .nav-btn.active {
+    background-color: rgba(30, 41, 59, 0.8);
+    color: #f1f5f9;
+}
+
+/* ===== Filter buttons ===== */
+.filter-btn {
+    background-color: #f1f5f9;
+    color: #64748b;
+}
+.dark .filter-btn {
+    background-color: #1e293b;
+    color: #94a3b8;
+}
+.filter-btn:hover {
+    background-color: #e2e8f0;
+}
+.dark .filter-btn:hover {
+    background-color: #334155;
+}
+.filter-btn.active {
+    background-color: #0ea5e9;
+    color: #ffffff;
+}
+.dark .filter-btn.active {
+    background-color: #0284c7;
+    color: #ffffff;
+}
+
+/* ===== Toast notification ===== */
+.toast {
+    animation: slideUpFade 0.3s ease;
+}
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Custom scrollbar ===== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, 0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.6); }
+
+/* ===== Drag & drop active state ===== */
+.drop-active {
+    border-color: #0ea5e9 !important;
+    background: rgba(14, 165, 233, 0.05) !important;
+}

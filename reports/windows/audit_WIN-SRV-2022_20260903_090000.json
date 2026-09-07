@@ -1,0 +1,70 @@
+{
+  "tool": "autosec-hardening",
+  "version": "1.1.0",
+  "timestamp": "2026-09-03T09:00:00Z",
+  "hostname": "WIN-SRV-2022",
+  "os": "windows",
+  "os_details": "Microsoft Windows Server 2022 Standard",
+  "score": 57,
+  "passed": 4,
+  "failed": 3,
+  "total": 7,
+  "checks": [
+    {
+      "id": "WIN-NET-001",
+      "category": "Réseau & Protocoles",
+      "description": "Protocole obsolète SMBv1 désactivé",
+      "status": "pass",
+      "severity": "critical",
+      "remediation": "Désactiver SMBv1 via Disable-WindowsOptionalFeature -FeatureName SMB1Protocol"
+    },
+    {
+      "id": "WIN-NET-002",
+      "category": "Réseau & Protocoles",
+      "description": "Protocole LLMNR désactivé (Anti-Responder/MitM)",
+      "status": "fail",
+      "severity": "high",
+      "remediation": "Définir EnableMulticast = 0 dans HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient"
+    },
+    {
+      "id": "WIN-NET-003",
+      "category": "Réseau & Protocoles",
+      "description": "Signature SMB requise (Anti-SMB Relay)",
+      "status": "fail",
+      "severity": "high",
+      "remediation": "Activer RequireSecuritySignature via Set-SmbServerConfiguration"
+    },
+    {
+      "id": "WIN-AUTH-001",
+      "category": "Authentification & Identité",
+      "description": "NTLMv2 forcé uniquement (LM & NTLMv1 refusés)",
+      "status": "pass",
+      "severity": "high",
+      "remediation": "Définir LmCompatibilityLevel = 5 dans HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Lsa"
+    },
+    {
+      "id": "WIN-AUTH-002",
+      "category": "Authentification & Identité",
+      "description": "Protection mémoire LSA activée (Anti-Mimikatz)",
+      "status": "fail",
+      "severity": "critical",
+      "remediation": "Activer RunAsPPL = 1 dans HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Lsa"
+    },
+    {
+      "id": "WIN-FW-001",
+      "category": "Pare-feu",
+      "description": "Pare-feu actif sur tous les profils (Domain, Private, Public)",
+      "status": "pass",
+      "severity": "critical",
+      "remediation": "Activer le pare-feu Windows Defender sur les 3 profils (Domain, Private, Public)"
+    },
+    {
+      "id": "WIN-LOG-001",
+      "category": "Journalisation",
+      "description": "PowerShell Script Block Logging activé (Event 4104)",
+      "status": "pass",
+      "severity": "medium",
+      "remediation": "Activer EnableScriptBlockLogging = 1 dans les stratégies PowerShell"
+    }
+  ]
+}
